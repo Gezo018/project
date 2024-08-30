@@ -5,7 +5,7 @@ include 'navbar.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    echo "<div class='container'><h2>Please log in to view your cart.</h2></div>";
+    echo "<div class='container'><h2>กรุณาล็อกอินก่อนทำการสั่งซื้อสินค้า</h2></div>";
     exit();
 }
 
