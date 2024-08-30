@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ยินดีต้อนรับสู่บ้านแฟรงค์เบเกอร์</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: #4a4a4a;
+            background-color: #fff8f0;
+        }
+
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #f4e1d2;
+            border-bottom: 2px solid #d4a373;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            margin: 0;
+        }
+
+        .nav-links li {
+            margin: 0 15px;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color:  #4a4a4a;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links li a:hover {
+            color: #d4a373;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .logo img {
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .logo h1 {
+            color: #a56336;
+            margin: 0;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger .line {
+            width: 25px;
+            height: 3px;
+            background-color: #4a4a4a;
+            margin: 4px 0;
+        }
+
+        .contact-circle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: #a56336;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .contact-circle.active {
+            transform: rotate(45deg);
+        }
+
+        .contact-options {
+            position: fixed;
+            bottom: 100px;
+            right: 40px;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .contact-options.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .contact-option {
+            background-color: #f4a261;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .contact-option:hover {
+            background-color: #e76f51;
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            nav.active .nav-links {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background-color: #f4e1d2;
+                border-top: 2px solid #d4a373;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 50px 20px;
+            background: #f4e1d2;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        .hero h2 {
+            color: #ffffff;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            color: #4a4a4a;
+            font-size: 16px;
+        }
+
+        .slideshow-container {
+            position: relative;
+            width: 60%;
+            margin: auto;
+        }
+
+        .mySlides {
+            display: none;
+        }
+
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            margin-top: -22px;
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+        }
+
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .prev:hover, .next:hover {
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .features {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .feature {
+            text-align: center;
+            width: 30%;
+            transition: transform 0.3s ease;
+            background: #fff8f0;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .feature:hover {
+            transform: scale(1.05);
+        }
+
+        .feature img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        .feature h3 {
+            color: #a56336;
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .feature p {
+            color: #4a4a4a;
+            font-size: 14px;
+        }
+
+        .footer {
+            background-color: #f4e1d2;
+            padding: 20px;
+            text-align: left;
+            margin-top: 20px;
+            border-top: 2px solid #d4a373;
+        }
+
+        .main-categories {
+            margin-bottom: 20px;
+        }
+
+        .main-categories h3 {
+            color: #a56336;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .main-categories ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .main-categories li {
+            margin-bottom: 8px;
+        }
+
+        .main-categories li a {
+            text-decoration: none;
+            color: #4a4a4a;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .main-categories li a:hover {
+            color: #a56336;
+        }
+
+        .footer p {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .cart-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 0;
+            background-color: #a56336;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .cart-button:hover {
+            background-color: #d4a373;
+        }
+        .prev, .next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    margin-top: -22px;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.6s ease;
+    border-radius: 3px;
+    user-select: none;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+}
+
+.prev {
+    left: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+.next {
+    right: 0;
+    border-radius: 0 3px 3px 0;
+}
+
+.prev:hover, .next:hover {
+    background-color: rgba(0, 0, 0, 0.8); /* Darker on hover */
+}
+
+.slideshow-container {
+    position: relative;
+    max-width: 100%;
+    margin: auto;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.mySlides img {
+    width: 100%;
+    display: block;
+    border-radius: 10px;
+}
+
+.fade {
+    -webkit-animation-name: fade;
+    -webkit-animation-duration: 4s;
+    animation-name: fade;
+    animation-duration: 4s;
+}
+
+@-webkit-keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+}
+
+@keyframes fade {
+    from {opacity: .4} 
+    to {opacity: 1}
+}
+    </style>
+     <script>
+        // Slideshow functions
+        var slideIndex = 0;
+        var slideInterval;
+
+        function showSlides() {
+            var i;
+            var slides = document.getElementsByClassName("mySlides");
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) { slideIndex = 1 }
+            slides[slideIndex - 1].style.display = "block";
+            slideInterval = setTimeout(showSlides, 5000); // Change image every 5 seconds
+        }
+
+        function plusSlides(n) {
+            clearTimeout(slideInterval); // Stop the current interval
+            slideIndex += n - 1; // Adjust slideIndex to show the correct slide
+            showSlides();
+        }
+
+        showSlides(); // Start the slideshow
+    </script>
+</head>
+<body>
+    
+    <?php include('navbar.php'); ?>
+
+    <div class="container">
+        <section class="hero">
+            <h2>ของหวานที่อร่อยที่สุดสำหรับคุณ</h2>
+            <p>สำรวจเมนูที่น่าตื่นเต้นของเราและสั่งซื้อออนไลน์ได้ทันที</p>
+            <div class="slideshow-container">
+                <div class="mySlides fade">
+                    <img src="pic/bdcake(1).jpg" style="width:100%">
+                </div>
+                <div class="mySlides fade">
+                    <img src="pic/brownie.jpg" style="width:100%">
+                </div>
+                <div class="mySlides fade">
+                    <img src="pic/minicake.jpg" style="width:100%">
+                </div>
+                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="feature">
+                <a href="menu.html#cakes">
+                    <img src="pic/bdcake2.jpg" alt="เค้กวันเกิด">
+                    <h3>เค้กปอนด์</h3>
+                    <p>เริ่มต้นทีปอนด์ละ 250 บาท ทำตามแบบที่ลูกค้าต้องการ</p>
+                </a>
+            </div>
+            <div class="feature">
+                <a href="menu.html#cupcakes">
+                    <img src="pic/brownie.jpg" alt="บราวนี่จิ๋ว">
+                    <h3>บราวนี่จิ๋ว</h3>
+                    <p>สั่งขั้นต่ำ 100 ชิ้น ราคาชิ้นละ 3 บาท</p>
+                </a>
+            </div>
+            <div class="feature">
+                <a href="menu.html#breads">
+                    <img src="pic/minicake.jpg" alt="มินิเค้ก">
+                    <h3>มินิเค้ก</h3>
+                    <p>มี 25 ชิ้นต่อ 1 ถาด ราคา 250 บาท</p>
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Contact Circle -->
+    <div class="contact-circle" onclick="toggleContactOptions()">
+        ติดต่อเรา
+    </div>
+
+    <!-- Contact Options -->
+    <div class="contact-options" id="contactOptions">
+        <a href="https://www.facebook.com/" class="contact-option" target="_blank">Facebook</a>
+        <a href="https://lin.ee/7w8KO9H"><img src="https://scdn.line-apps.com/n/line_add_friends/btn/th.png" alt="เพิ่มเพื่อน" height="36" border="0"></a>
+        <a href="https://www.instagram.com/" class="contact-option" target="_blank">Instagram</a>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="main-categories">
+                <h3>MAIN CATEGORIES</h3>
+                <ul>
+                    <li><a href="menu.html">เมนูขนมของเรา</a></li>
+                    <li><a href="order_guide.html">วิธีการสั่งซื้อ</a></li>
+                    <li><a href="reviews.html">รีวิวขนม</a></li>
+                    <li><a href="#contactOptions">ติดต่อเรา</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3881.2964426685424!2d100.94540671526586!3d13.114097413031734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3102b82f96ea9879%3A0x652d2e227561b4ae!2sBakery%20Shop!5e0!3m2!1sen!2sth!4v1623288747881!5m2!1sen!2sth" 
+    width="60%" 
+    height="450" 
+    style="border:0;" 
+    allowfullscreen="" 
+    loading="lazy">
+    </iframe>
+    <script>
+        // Slideshow functions
+        var slideIndex = 0;
+        showSlides();
+
+        function showSlides() {
+            var i;
+            var slides = document.getElementsByClassName("mySlides");
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) { slideIndex = 1 }
+            slides[slideIndex - 1].style.display = "block";
+            setTimeout(showSlides, 3000); // Change image every 3 seconds
+        }
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        // Toggle navigation menu for mobile
+        function toggleNav() {
+            var nav = document.querySelector('nav');
+            nav.classList.toggle('active');
+        }
+
+        // Toggle contact options
+        function toggleContactOptions() {
+            var contactCircle = document.querySelector('.contact-circle');
+            var contactOptions = document.getElementById('contactOptions');
+
+            // Toggle active class for contact circle
+            contactCircle.classList.toggle('active');
+
+            // Toggle active class for contact options
+            contactOptions.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
