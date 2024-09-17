@@ -138,13 +138,16 @@ $conn->close();
     <?php if ($success): ?>
     <script>
         swal({
-            title: "ยินดีต้อนรับ",
-            text: "เข้าสู่ระบบสำเร็จ!",
-            icon: "success",
-            button: "ตกลง",
-        }).then(function() {
-            window.location.href = 'index.php'; // Redirect to homepage after alert
-        });
+    title: "ยินดีต้อนรับ",
+    text: "เข้าสู่ระบบสำเร็จ!",
+    icon: "success",
+    button: "ตกลง",
+    timer: 2500, // ตั้งเวลา 3 วินาที (3000 มิลลิวินาที)
+    closeOnClickOutside: false,
+    closeOnEsc: false,
+}).then(function() {
+    window.location.href = 'index.php'; // เปลี่ยนเส้นทางไปยังหน้าแรกหลังจากแสดงการแจ้งเตือน
+});
     </script>
     <?php endif; ?>
 </body>

@@ -28,15 +28,23 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ประวัติการสั่งซื้อ - บ้านแฟรงค์เบเกอร์</title>
+    <title>ประวัติการสั่งซื้อ - baanfrankbaker</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Itim&display=swap">
     <style>
         body {
             font-family: 'Itim', cursive;
-            background-color: #fff8f0;
+            background-color: #F9DBBA;
             margin: 0;
             padding: 0;
         }
+        header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #FFD4DB;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}   
         .container {
             width: 90%;
             max-width: 1200px;
@@ -55,7 +63,7 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
             border: 1px solid #e0e0e0;
             padding: 15px;
             border-radius: 8px;
-            background-color: #fff4e6;
+            background-color: #F9DBBA;
             margin-bottom: 20px;
         }
         .order h3 {
@@ -72,7 +80,7 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
         .order-item {
             padding: 10px;
-            background-color: #fdf2e9;
+            background-color: #F9DBBA;
             border: 1px solid #ddd;
             border-radius: 5px;
             margin-bottom: 10px;

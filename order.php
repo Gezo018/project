@@ -48,9 +48,17 @@ include('navbar.php');  // Include the updated navbar
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>สั่งซื้อ - <?php echo htmlspecialchars($product['name']); ?></title>
-    <link rel="stylesheet" href="styles.css">
+    
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Itim&display=swap">
     <style>
+        :root {
+            --primary-color: #FF9A8B;
+            --secondary-color: #FF6A88;
+            --accent-color: #FF99AC;
+            --background-color:  #F9DBBA;
+            --text-color: #4A4A4A;
+            --card-bg-color: #FFFFFF;
+        }
         body {
             font-family: 'Itim', sans-serif;
             line-height: 1.6;
@@ -61,53 +69,15 @@ include('navbar.php');  // Include the updated navbar
         }
 
         header {
-            padding: 20px;
-            background-color: #f4e1d2;
-            color: #4a4a4a;
-            text-align: center;
-            font-size: 24px;
-            font-weight: 300;
-        }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #FFD4DB;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-        .navbar {
-            background-color: #a56336; /* Match the button color */
-            padding: 10px 20px;
-        }
-
-        .navbar .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .navbar-brand {
-            color: #fff;
-            font-size: 24px;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .navbar-nav {
-            list-style: none;
-            display: flex;
-            margin: 0;
-            padding: 0;
-        }
-
-        .navbar-nav li {
-            margin-left: 20px;
-        }
-
-        .navbar-nav a {
-            color: #fff;
-            font-size: 16px;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .navbar-nav a:hover {
-            color: #d4a373; /* Match the hover color of the button */
-        }
+        
 
         .container {
             padding: 20px;
@@ -161,19 +131,23 @@ include('navbar.php');  // Include the updated navbar
         }
 
         .form-group button {
-            background-color: #a56336;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+            display: inline-block;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 154, 139, 0.4);
             width: 100%;
         }
 
         .form-group button:hover {
-            background-color: #d4a373;
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 154, 139, 0.6);
         }
 
         .total-price {
@@ -191,26 +165,43 @@ include('navbar.php');  // Include the updated navbar
             <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" style="width:100%; border-radius:10px; margin-bottom:20px;">
             <form action="add_to_cart.php" method="POST">
                 <div class="form-group">
-                    <label for="type">ประเภท:</label>
-                    <select id="type" name="type" onchange="updateSizeOptions()">
-                        <option value="pound">เลือกขนาดปอนด์</option>
-                        <option value="piece">เลือกเป็นชิ้น</option>
-                        <option value="tray">เลือกเป็นถาด</option>
-                        <option value="box">เลือกเป็นกล่อง</option>
-                        <option value="tuy">เลือกเป็นถ้วย</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
                     <label for="size">ขนาด:</label>
                     <select id="size" name="size" onchange="updatePrice()">
-                        <!-- Options will be dynamically inserted by JavaScript -->
+                        <?php
+                        // Dynamically generate size options based on product type
+                        switch ($product['type']) {
+                            case 'Pound':
+                                echo '<option value="1 ปอนด์" data-price="250">1 ปอนด์ - ฿250.00</option>';
+                                echo '<option value="1.5 ปอนด์" data-price="350">1.5 ปอนด์ - ฿350.00</option>';
+                                echo '<option value="2 ปอนด์" data-price="500">2 ปอนด์ - ฿500.00</option>';
+                                break;
+                            case 'Tray':
+                                echo '<option value="ถาด" data-price="150">เค้กไข่ - ฿150.00</option>';
+                                echo '<option value="ถาด" data-price="160">เค้กโบราณ - ฿160.00</option>';
+                                echo '<option value="ถาด" data-price="200">มินิเค้ก - ฿200.00</option>';
+                                break;
+                            case 'Box':
+                                echo '<option value="กล่อง" data-price="200">คัพเค้ก - ฿200.00</option>';
+                                echo '<option value="กล่อง" data-price="240">คัพเค้กบัตเตอร์ - ฿240.00</option>';
+                                echo '<option value="กล่อง" data-price="300">บราวนี่จิ๋ว - ฿300.00</option>';
+                                echo '<option value="กล่อง" data-price="35">ปุยฝ้าย - ฿35.00</option>';
+                                break;
+                            case 'Tuy':
+                                echo '<option value="อื่นๆ" data-price="50">ขนมปุยฝ้าย - ฿50.00</option>';
+                                echo '<option value="อื่นๆ" data-price="100">เค้กถ้วย - ฿100.00</option>';
+                                break;
+                            case 'Each':
+                                echo '<option value="ชิ้น" data-price="50">เค้กครึ่งปอนด์ - ฿50.00</option>';
+                                break;
+                        }
+                        ?>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label for="flavor">เลือกรสชาติเนื้อเค้ก:</label>
-                    <select id="flavor" name="flavor">
+                    <select id="flavor" name="flavor" onchange="updatePrice()">
+                        <option value="ปกติ">ปกติ</option>
                         <option value="ช็อกโกแลต">ช็อกโกแลต</option>
                         <option value="สตอเบอรี่">สตอเบอรี่</option>
                         <option value="วนิลา">วนิลา</option>
@@ -225,8 +216,9 @@ include('navbar.php');  // Include the updated navbar
                 </div>
 
                 <div class="form-group total-price">
-                    ราคา: ฿<span id="price">0.00</span>
+                    ราคา: ฿<span id="price"><?php echo number_format($product['price'], 2); ?></span>
                 </div>
+                
                 <div class="form-group">
                     <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product_id); ?>">
                     <input type="hidden" id="price_input" name="price" value="0">
@@ -237,72 +229,37 @@ include('navbar.php');  // Include the updated navbar
     </div>
 
     <script>
-        function updateSizeOptions() {
-            const typeSelect = document.getElementById('type');
-            const sizeSelect = document.getElementById('size');
-            const selectedType = typeSelect.value;
-
-            sizeSelect.innerHTML = ''; // Clear existing options
-
-            if (selectedType === 'pound') {
-                // Add pound options
-                sizeSelect.innerHTML = `
-                    <option value="1" data-price="250">1 ปอนด์ - ฿250.00</option>
-                    <option value="1.5" data-price="350">1.5 ปอนด์( จะเป็นเค้ก 2 ชั้น ) - ฿350.00</option>
-                    <option value="2" data-price="500">2 ปอนด์ - ฿500.00</option>
-                `;
-            } else if (selectedType === 'piece') {
-                // Add piece options
-                sizeSelect.innerHTML = `
-                    <option value="piece" data-price="50
-                    ">1 ชิ้น - ฿50.00</option>
-                `;
-            } else if (selectedType === 'tray') {
-                // Add piece options
-                sizeSelect.innerHTML = `
-                    <option value="tray" data-price="150">เค้กไข่ 1 ถาด - ฿150.00</option>
-                    <option value="tray" data-price="160">เค้กโบราณ 1 ถาด- ฿160.00</option>
-                    <option value="tray" data-price="250">มินิเค้ก 1 ถาด - ฿250.00</option>
-                `;
-            }   else if (selectedType === 'box') {
-                // Add piece options
-                sizeSelect.innerHTML = `
-                    <option value="tray" data-price="200">คัพเค้ก 1 กล่อง - ฿200.00</option>
-                    <option value="tray" data-price="300">บราวนี่จิ๋ว 1 กล่อง - ฿300.00</option>
-                    
-                `;
-            }else if (selectedType === 'tuy') {
-                // Add piece options
-                sizeSelect.innerHTML = `
-                    <option value="tuy" data-price="100">4 ถ้วย - ฿100.00</option>
-                    
-                `;
-            }
-
-            // Update price based on the first available option
-            updatePrice();
-        }
-
         function updatePrice() {
             const sizeSelect = document.getElementById('size');
             const quantityInput = document.getElementById('quantity');
+            const flavorSelect = document.getElementById('flavor');
             const priceSpan = document.getElementById('price');
             const priceInput = document.getElementById('price_input');
 
-            const selectedOption = sizeSelect.options[sizeSelect.selectedIndex];
-            const pricePerUnit = parseFloat(selectedOption.getAttribute('data-price')) || 0;
+            const selectedSizeOption = sizeSelect.options[sizeSelect.selectedIndex];
+            const pricePerUnit = parseFloat(selectedSizeOption.getAttribute('data-price')) || 0;
             const quantity = parseInt(quantityInput.value) || 1;
 
-            const totalPrice = pricePerUnit * quantity;
+            // Add logic for flavor pricing if necessary
+            const selectedFlavor = flavorSelect.value;
+            let flavorPrice = 0;
+
+            // Example: adding extra cost for specific flavors (if needed)
+            if (selectedFlavor === 'ช็อกโกแลต') {
+                flavorPrice = 20; // ฿20 extra for chocolate flavor
+            } else if (selectedFlavor === 'มะพร้าว') {
+                flavorPrice = 20; // ฿20 extra for coconut flavor
+            }   
+
+            const totalPrice = (pricePerUnit + flavorPrice) * quantity;
 
             priceSpan.textContent = totalPrice.toFixed(2);
             priceInput.value = totalPrice.toFixed(2);
         }
 
-        // Initialize the size options and price on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            updateSizeOptions();
-        });
+        document.getElementById('quantity').addEventListener('input', updatePrice);
+        document.getElementById('flavor').addEventListener('change', updatePrice);
+        updatePrice(); // Initialize the price when the page loads
     </script>
 </body>
 </html>

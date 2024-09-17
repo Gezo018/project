@@ -28,7 +28,7 @@ if ($result->num_rows > 0) {
     }
 }
 
-$title = "ประเภทเค้ก - ร้านเบเกอรี่ของเรา";
+$title = "สินค้าทั้งหมด - baanfrankbaker";
 
 // Handle form submission for adding a new product
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -73,12 +73,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Itim&display=swap">
     <link rel="stylesheet" href="styles.css">
     <style>
+        :root {
+            --primary-color: #FF9A8B;
+            --secondary-color: #FF6A88;
+            --accent-color: #FF99AC;
+            --background-color:  #F9DBBA;
+            --text-color: #4A4A4A;
+            --card-bg-color: #FFFFFF;
+        }
         body {
             font-family: 'Itim', sans-serif;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
-            background-color: #fff8f0;
+            background-color: #F9DBBA;
         }
 
         header {
@@ -160,17 +168,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         .cake-item .order-button {
             display: inline-block;
-            padding: 10px 30px;
-            background-color: #b38b6d;
-            color: #fff;
-            border-radius: 5px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            padding: 12px 25px;
             text-decoration: none;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 154, 139, 0.4);
         }
 
         .cake-item .order-button:hover {
-            background-color: #d4a373;
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 154, 139, 0.6);
         }
 
         .admin-actions {
@@ -363,6 +375,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </form>
         </div>
     </div>
+
 
     <script>
         var modal = document.getElementById("myModal");

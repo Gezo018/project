@@ -186,7 +186,7 @@ function sendLineNotifyWithImage($message, $imageFilePath) {
 <style>
     body {
         font-family: 'Itim', sans-serif;
-        background-color: #f8f9fa;
+        background-color: #F9DBBA;
         color: #333;
         margin: 0;
         padding: 0;

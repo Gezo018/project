@@ -16,7 +16,7 @@ if ($conn->connect_error) {
 }
 
 // ฟังก์ชันการส่งรีวิว
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_review'])) {
     $customer_name = $_POST['customer_name'];
     $customer_email = $_POST['customer_email'];
     $rating = $_POST['rating'];
@@ -57,8 +57,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->close();
 }
 
+// ฟังก์ชันลบรีวิว
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_review']) && isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
+    $review_id = $_POST['review_id'];
+    $stmt = $conn->prepare("DELETE FROM reviews WHERE id = ?");
+    $stmt->bind_param("i", $review_id);
+
+    if ($stmt->execute()) {
+        echo "<script>alert('รีวิวถูกลบเรียบร้อยแล้ว');</script>";
+    } else {
+        echo "<script>alert('การลบรีวิวล้มเหลว กรุณาลองใหม่อีกครั้ง');</script>";
+    }
+    $stmt->close();
+}
+
 // ดึงข้อมูลรีวิวจากฐานข้อมูล
-$reviews = $conn->query("SELECT customer_name, rating, review_text, review_date, image_path FROM reviews ORDER BY review_date DESC");
+$reviews = $conn->query("SELECT id, customer_name, rating, review_text, review_date, image_path FROM reviews ORDER BY review_date DESC");
 
 $conn->close();
 ?>
@@ -68,11 +82,11 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>รีวิวร้านหนมบ้านแฟรงค์</title>
+    <title>รีวิวขนม - baanfrankbaker</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <style>
-        :root {
+         :root {
             --primary-color: #d35400;
             --secondary-color: #f39c12;
             --background-color: #f7f7f7;
@@ -82,7 +96,7 @@ $conn->close();
 
         body {
             font-family: 'Itim', sans-serif;
-            background-color: #fff8f0;
+            background-color: #F9DBBA;
             color: var(--text-color);
             margin: 0;
             padding: 0;
@@ -193,6 +207,20 @@ $conn->close();
             margin-top: 10px;
         }
 
+        .delete-button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-button:hover {
+            background-color: #c0392b;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 10px;
@@ -271,7 +299,7 @@ $conn->close();
         <label for="review_image">แนบรูปภาพ (ไม่บังคับ):</label>
         <input type="file" name="review_image" id="review_image" accept="image/*">
 
-        <button type="submit">ส่งรีวิว</button>
+        <button type="submit" name="submit_review">ส่งรีวิว</button>
     </form>
 
     <h2>รีวิวล่าสุด</h2>
@@ -293,6 +321,14 @@ $conn->close();
                 <span><i class="far fa-calendar-alt"></i> <?php echo date("d M Y", strtotime($review['review_date'])); ?></span>
                 <span><i class="far fa-clock"></i> <?php echo date("H:i", strtotime($review['review_date'])); ?></span>
             </div>
+
+            <!-- ปุ่มลบรีวิว (สำหรับ admin) -->
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                <form method="POST" action="">
+                    <input type="hidden" name="review_id" value="<?php echo $review['id']; ?>">
+                    <button type="submit" name="delete_review" class="delete-button">ลบรีวิว</button>
+                </form>
+            <?php endif; ?>
         </div>
     <?php endwhile; ?>
 </div>

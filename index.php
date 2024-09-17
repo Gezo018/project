@@ -10,7 +10,7 @@ include 'navbar.php';
 
 // Define page variables
 $title = "ยินดีต้อนรับสู่บ้านแฟรงค์เบเกอร์";
-$description = "ของหวานที่อร่อยที่สุดสำหรับคุณ";
+$description = "🎉สินค้ายอดนิยมของทางร้าน🎖️";
 $logo_image = "logo.png";
 $slides = [
     "pic/bdcake(1).jpg",
@@ -33,24 +33,34 @@ if (isset($_GET['logout'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $title; ?></title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Itim&display=swap">
-    <link rel="stylesheet" href="styles.css">
+    
     <style>
-         body {
+:root {
+            --primary-color: #FF9A8B;
+            --secondary-color: #FF6A88;
+            --accent-color: #FF99AC;
+            --background-color:  #F9DBBA;
+            --text-color: #4A4A4A;
+            --card-bg-color: #FFFFFF;
+        }
+
+        body {
             font-family: 'Itim', sans-serif;
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
-            background-color: #fff8f0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease;
         }
 
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 20px;
-            background-color: #f4e1d2;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #FFD4DB;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
         .container {
             width: 90%;
@@ -59,22 +69,16 @@ if (isset($_GET['logout'])) {
             padding: 20px;
         }
 
-        
-        header .logo {
-    max-width: 150px; /* Adjust this value to make the logo larger */
-    height: auto; /* Maintain aspect ratio */
-}
-
         .hero {
             text-align: center;
             padding: 50px 20px;
-            background: #f4e1d2;
+            background: #BBE7FE;
             margin-bottom: 20px;
             border-radius: 10px;
         }
 
         .hero h2 {
-            color: #ffffff;
+            color: #000000;;
             font-size: 24px;
             margin-bottom: 10px;
         }
@@ -85,72 +89,83 @@ if (isset($_GET['logout'])) {
         }
 
         .slideshow-container {
-            position: relative;
-            width: 60%;
-            margin: auto;
-            overflow: hidden; /* Hide overflow to prevent content overflow */
-            border-radius: 10px; /* Add rounded corners */
-        }
+        position: relative;
+        width: 100%;
+        padding-top: 50%; /* 2:1 Aspect Ratio */
+        margin: auto;
+        overflow: hidden;
+        border-radius: 10px;
+    }
 
-        .mySlides {
-            display: none;
-            width: 100%;
-            transition: opacity 1s ease-in-out; /* Smooth transition effect */
-            opacity: 0; /* Start hidden */
-        }
+    .mySlides {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+        transition: opacity 1s ease-in-out;
+        opacity: 0;
+    }
 
-        .mySlides.active {
-            display: block;
-            opacity: 1; /* Fade in the active slide */
-        }
+    .mySlides.active {
+        display: block;
+        opacity: 1;
+    }
 
-        .prev, .next {
-            cursor: pointer;
-            position: absolute;
-            top: 50%;
-            width: auto;
-            margin-top: -22px;
-            padding: 16px;
-            color: white;
-            font-weight: bold;
-            font-size: 18px;
-            transition: 0.6s ease;
-            border-radius: 3px;
-            user-select: none;
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-        }
+    .mySlides img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 
-        .next {
-            right: 0;
-        }
+    .prev, .next {
+        cursor: pointer;
+        position: absolute;
+        top: 50%;
+        width: auto;
+        margin-top: -22px;
+        padding: 16px;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 3px;
+        transition: 0.6s ease;
+        user-select: none;
+    }
 
-        .prev {
-            left: 0;
-        }
+    .next {
+        right: 0;
+    }
 
-        .prev:hover, .next:hover {
-            background-color: rgba(0, 0, 0, 0.8); /* Darker on hover */
-        }
+    .prev {
+        left: 0;
+    }
 
-        .dot-container {
-            text-align: center;
-            margin-top: 20px;
-        }
+    .prev:hover, .next:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+    }
 
-        .dot {
-            cursor: pointer;
-            height: 15px;
-            width: 15px;
-            margin: 0 2px;
-            background-color: #bbb;
-            border-radius: 50%;
-            display: inline-block;
-            transition: background-color 0.6s ease;
-        }
+    .dot-container {
+        text-align: center;
+        margin-top: 20px;
+    }
 
-        .dot.active {
-            background-color: #717171;
-        }
+    .dot {
+        cursor: pointer;
+        height: 15px;
+        width: 15px;
+        margin: 0 2px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+        transition: background-color 0.6s ease;
+    }
+
+    .dot.active {
+        background-color: #717171;
+    }
 
         .features {
             display: flex;
@@ -188,11 +203,11 @@ if (isset($_GET['logout'])) {
         }
 
         .footer {
-            background-color: #f4e1d2;
+            background-color: #BBE7FE;
             padding: 20px;
             text-align: left;
             margin-top: 20px;
-            border-top: 2px solid #d4a373;
+            border-top: 2px solid #BBE7FE;
         }
 
         .main-categories {
@@ -225,28 +240,39 @@ if (isset($_GET['logout'])) {
         .main-categories li a:hover {
             color: #a56336;
         }
+        .footer .main-categories ul li a {
+            padding: 5px 10px;
+            display: inline-block;
+            border-radius: 5px;
+            background-color: var(--primary-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .footer .main-categories ul li a:hover {
+            background-color: var(--accent-color);
+            color: #fff;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <section class="hero">
-            <h2><?php echo $description; ?></h2>
-            <p>สำรวจเมนูที่น่าตื่นเต้นของเราและสั่งซื้อออนไลน์ได้ทันที</p>
+            
             <div class="slideshow-container">
                 <div class="mySlides fade">
-                    <img src="choc.jpg" style="width:100%">
+                    <img src="nn.png" style="width:100%">
                  </div>
             <div class="mySlides fade">
-                <img src="cupcake.jpg" style="width:100%">
+                <img src="cake1.png" style="width:100%">
             </div>
             <div class="mySlides fade">
-                <img src="bo.jpg" style="width:100%">
+                <img src="free.png" style="width:100%">
             </div>
             <div class="mySlides fade">
-                <img src="foy.jpg" style="width:100%">
+                <img src="show.png" style="width:100%">
             </div>
             <div class="mySlides fade">
-                <img src="noy.jpg" style="width:100%">
+                <img src="like.png" style="width:100%">
             </div>
             <a class="prev" onclick="moveSlide(-1)">&#10094;</a>
             <a class="next" onclick="moveSlide(1)">&#10095;</a>
@@ -264,23 +290,23 @@ if (isset($_GET['logout'])) {
 
         <section class="features">
             <div class="feature">
-                <a href="<?php echo isset($_SESSION['username']) ? 'order.php?product_id=24&product_name=เค้กช็อกโกแล็ต&product_price=250.00' : 'login.php'; ?>">
+                <a href="<?php echo isset($_SESSION['username']) ? 'pound.php' : 'login.php'; ?>">
                     <img src="hbd.jpg" alt="เค้กวันเกิด">
                     <h3>เค้กปอนด์</h3>
                     <p>เริ่มต้นทีปอนด์ละ 250 บาท ทำตามแบบที่ลูกค้าต้องการ</p>
                 </a>
             </div>
             <div class="feature">
-                <a href="<?php echo isset($_SESSION['username']) ? 'order.php?product_id=27&product_name=บราวนี่จิ๋ว&product_price=300.00' : 'login.php'; ?>">
+                <a href="<?php echo isset($_SESSION['username']) ? 'box.php' : 'login.php'; ?>">
                     <img src="b2.jpg" alt="บราวนี่จิ๋ว">
-                    <h3>บราวนี่จิ๋ว</h3>
+                    <h3>แบบกล่อง</h3>
                     <p>สั่งขั้นต่ำ 100 ชิ้น ราคาชิ้นละ 3 บาท</p>
                 </a>
             </div>
             <div class="feature">
-                <a href="<?php echo isset($_SESSION['username']) ? 'order.php?product_id=28&product_name=มินิเค้ก+รวมรส&product_price=250.00' : 'login.php'; ?>">
+                <a href="<?php echo isset($_SESSION['username']) ? 'Tray.php' : 'login.php'; ?>">
                     <img src="mini.jpg" alt="มินิเค้ก">
-                    <h3>มินิเค้ก</h3>
+                    <h3>แบบถาด</h3>
                     <p>มี 25 ชิ้นต่อ 1 ถาด ราคา 250 บาท</p>
                 </a>
             </div>
@@ -288,21 +314,23 @@ if (isset($_GET['logout'])) {
     </div>
 
     <footer class="footer">
-        <div class="container">
-            <div class="main-categories">
-                <h3>MAIN CATEGORIES</h3>
-                <ul>
-                    <li><a href="type.php">เมนูขนมของเรา</a></li>
-                    <li><a href="order_guide.php">วิธีการสั่งซื้อ</a></li>
-                    <li><a href="review.php">รีวิวขนม</a></li>
-                    <li><a href="about.php">ติดต่อเรา</a></li>
-                </ul>
-            </div>
+    <div class="container footer-content" style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div class="main-categories" style="flex: 1; padding-right: 20px;">
+            <h3>MAIN CATEGORIES</h3>
+            <ul>
+                <li><a href="type.php">เมนูขนมของเรา</a></li>
+                <li><a href="order_guide.php">วิธีการสั่งซื้อ</a></li>
+                <li><a href="review.php">รีวิวขนม</a></li>
+                <li><a href="about.php">ติดต่อเรา</a></li>
+            </ul>
         </div>
-    </footer>
+        <div class="map-container" style="flex: 1; max-width: 500px; padding-left: 20px;">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d485.7202978902494!2d100.94565!3d13.114234000000002!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3102b951c23ece51%3A0x345dfbd4e5efe9c5!2z4Lir4LiZ4Lih4Lia4LmJ4Liy4LiZ4LmB4Lif4Lij4LiH4LiE4LmM!5e0!3m2!1sen!2sth!4v1723607206253!5m2!1sen!2sth"
+                width="100%" height="200" style="border:0; border-radius: 10px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
+</footer>
 
-    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d485.7202978902494!2d100.94565!3d13.114234000000002!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3102b951c23ece51%3A0x345dfbd4e5efe9c5!2z4Lir4LiZ4Lih4Lia4LmJ4Liy4LiZ4LmB4Lif4Lij4LiH4LiE4LmM!5e0!3m2!1sen!2sth!4v1723607206253!5m2!1sen!2sth" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-    </iframe>
     <script>
         
     var slideIndex = 0;

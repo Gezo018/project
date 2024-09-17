@@ -24,7 +24,7 @@ $cart_id = $result['id'];
 
 // Fetch cart items
 $stmt = $pdo->prepare("
-    SELECT ci.*, p.name, p.image 
+    SELECT ci.*, p.name, p.price, p.image 
     FROM cart_items ci
     JOIN products p ON ci.product_id = p.id
     WHERE ci.cart_id = ?
@@ -33,6 +33,19 @@ $stmt->execute([$cart_id]);
 $cart_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $total_price = 0;
+
+function getPoundCakePrice($size) {
+    switch ($size) {
+        case '1':
+            return 250;
+        case '1.5':
+            return 350;
+        case '2':
+            return 500;
+        default:
+            return 250; // Default to 1 pound price
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -53,8 +66,8 @@ $total_price = 0;
         }
 
         body {
-            font-family: 'Itim', sans-serif;
-            background-color: #f9f9f9;
+            font-family: 'Prompt', sans-serif;
+            background-color: #F9DBBA;
             color: #333;
         }
 
@@ -216,27 +229,32 @@ $total_price = 0;
     </style>
 </head>
 <body>
-
     <div class="container">
         <h2 class="checkout-title">
             <i class="fas fa-shopping-cart"></i> กรอกข้อมูลการชำระเงิน
         </h2>
-
+        
         <div class="order-summary">
-            <h3>สรุปรายการสั่งซื้อ</h3>
-            <?php if ($cart_items): ?>
-                <?php foreach ($cart_items as $item): 
-                    $item_total = $item['price'] * $item['quantity'];
-                    $total_price += $item_total;
-                ?>
+    <h3>สรุปรายการสั่งซื้อ</h3>
+    <?php if ($cart_items): ?>
+        <?php foreach ($cart_items as $item): 
+            if ($item['size'] == '1.5' || $item['size'] == '2') {
+                $item_price = getPoundCakePrice($item['size']);
+            } else {
+                $item_price = $item['price'];
+            }
+            $item_total = $item_price * $item['quantity'];
+            $total_price += $item_total;
+        ?>
+                
                     <div class="order-item">
                         <img src="<?php echo htmlspecialchars($item['image']); ?>" alt="<?php echo htmlspecialchars($item['name']); ?>">
                         <div class="item-details">
                             <p><strong><?php echo htmlspecialchars($item['name']); ?></strong></p>
-                            <p>ขนาด: <?php echo htmlspecialchars($item['size']); ?></p>
+                            <p>ขนาด: <?php echo htmlspecialchars($item['size']); ?> <?php echo ($item['name'] == 'เค้กปอนด์') ? 'ปอนด์' : ''; ?></p>
                             <p>รสชาติ: <?php echo htmlspecialchars($item['flavor']); ?></p>
                             <p>จำนวน: <?php echo htmlspecialchars($item['quantity']); ?></p>
-                            <p>ราคา: ฿<?php echo number_format($item_total, 2); ?></p>
+                            <p class="item-price">ราคา: ฿<?php echo number_format($item_total, 2); ?></p>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -249,77 +267,76 @@ $total_price = 0;
         </div>
 
         <form action="process_order.php" method="POST" enctype="multipart/form-data" class="checkout-form">
-    <h3>ข้อมูลการจัดส่ง</h3>
-    <div class="form-group">
-        <label for="name">ชื่อ-นามสกุล</label>
-        <input type="text" id="name" name="name" placeholder="กรอกชื่อและนามสกุลของคุณ" required>
-    </div>
-    <div class="form-group">
-        <label for="address">ที่อยู่</label>
-        <textarea id="address" name="address" rows="3" placeholder="กรอกที่อยู่สำหรับการจัดส่ง" required></textarea>
-    </div>
-    <div class="form-group">
-        <label for="phone">เบอร์โทรศัพท์</label>
-        <input type="tel" id="phone" name="phone" placeholder="กรอกเบอร์โทรศัพท์ของคุณ" required>
-    </div>
-    <div class="form-group">
-        <label for="email">อีเมล</label>
-        <input type="email" id="email" name="email" placeholder="กรอกอีเมลของคุณ" required>
-    </div>
-    <div class="form-group">
-        <label for="cake_details">รายละเอียดเค้กที่ต้องการ (ถ้ามี)</label>
-        <input type="text" id="cake_details" name="cake_details" placeholder="กรอกรายละเอียดเค้กที่ต้องการ">
-    </div>
+            <h3>ข้อมูลการจัดส่ง</h3>
+            <div class="form-group">
+                <label for="name">ชื่อ-นามสกุล</label>
+                <input type="text" id="name" name="name" placeholder="กรอกชื่อและนามสกุลของคุณ" required>
+            </div>
+            <div class="form-group">
+                <label for="address">ที่อยู่</label>
+                <textarea id="address" name="address" rows="3" placeholder="กรอกที่อยู่สำหรับการจัดส่ง" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="phone">เบอร์โทรศัพท์</label>
+                <input type="tel" id="phone" name="phone" placeholder="กรอกเบอร์โทรศัพท์ของคุณ" required>
+            </div>
+            <div class="form-group">
+                <label for="email">อีเมล</label>
+                <input type="email" id="email" name="email" placeholder="กรอกอีเมลของคุณ" required>
+            </div>
+            <div class="form-group">
+                <label for="cake_details">รายละเอียดเพิ่มเติม(ถ้ามี)</label>
+                <input type="text" id="cake_details" name="cake_details" placeholder="กรอกรายละเอียดเค้กที่ต้องการ">
+            </div>
 
-    <!-- ฟิลด์การเลือกวันที่จัดส่ง -->
-    <div class="form-group">
-        <label for="delivery_date">เลือกวันที่จัดส่ง</label>
-        <input type="date" id="delivery_date" name="delivery_date" required>
+            <div class="form-group">
+                <label for="delivery_date">เลือกวันที่จัดส่ง</label>
+                <input type="date" id="delivery_date" name="delivery_date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="payment_method">วิธีการชำระเงิน</label>
+                <select id="payment_method" name="payment_method" required onchange="toggleUploadFields()">
+                    <option value="bank_transfer">โอนเงินผ่านธนาคาร</option>
+                    <option value="cash_on_delivery">ชำระเงินเมื่อได้รับสินค้า</option>
+                </select>
+            </div>
+
+            <div class="upload-group" id="upload_fields">
+                <div class="form-group">
+                    <label for="payment_slip">แนบสลิปการโอนเงิน (หากชำระเงินผ่านธนาคาร)</label>
+                    <input type="file" id="payment_slip" name="payment_slip" accept="image/*">
+                </div>
+
+                <div class="form-group" style="text-align: center;">
+                    <label><h2>QR CODE</h2></label>
+                    <img src="uploads/qrcode.jpg" alt="QR Code" class="qr-code" style="max-width: 400px; height: auto;">
+                </div>
+            </div>
+
+            <input type="hidden" name="total_price" value="<?php echo htmlspecialchars($total_price); ?>">
+            <button type="submit"><i class="fas fa-check"></i> ยืนยันการสั่งซื้อ</button>
+        </form>
+
+        <script>
+            function toggleUploadFields() {
+                const paymentMethod = document.getElementById('payment_method').value;
+                const uploadFields = document.getElementById('upload_fields');
+                
+                if (paymentMethod === 'bank_transfer') {
+                    uploadFields.style.display = 'flex';
+                } else {
+                    uploadFields.style.display = 'none';
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                toggleUploadFields();
+
+                const today = new Date().toISOString().split('T')[0];
+                document.getElementById('delivery_date').setAttribute('min', today);
+            });
+        </script>
     </div>
-
-    <div class="form-group">
-        <label for="payment_method">วิธีการชำระเงิน</label>
-        <select id="payment_method" name="payment_method" required onchange="toggleUploadFields()">
-            <option value="bank_transfer">โอนเงินผ่านธนาคาร</option>
-            <option value="cash_on_delivery">ชำระเงินเมื่อได้รับสินค้า</option>
-        </select>
-    </div>
-
-    <div class="upload-group" id="upload_fields">
-        <div class="form-group">
-            <label for="payment_slip">แนบสลิปการโอนเงิน (หากชำระเงินผ่านธนาคาร)</label>
-            <input type="file" id="payment_slip" name="payment_slip" accept="image/*">
-        </div>
-
-        <div class="form-group" style="text-align: center;">
-            <label><h2>QR CODE</h2></label>
-            <img src="uploads/qrcode.jpg" alt="QR Code" class="qr-code" style="max-width: 400px; height: auto;">
-        </div>
-    </div>
-
-    <input type="hidden" name="total_price" value="<?php echo htmlspecialchars(number_format($total_price, 2)); ?>">
-    <button type="submit"><i class="fas fa-check"></i> ยืนยันการสั่งซื้อ</button>
-</form>
-
-<script>
-    function toggleUploadFields() {
-        const paymentMethod = document.getElementById('payment_method').value;
-        const uploadFields = document.getElementById('upload_fields');
-        
-        if (paymentMethod === 'bank_transfer') {
-            uploadFields.style.display = 'flex';
-        } else {
-            uploadFields.style.display = 'none';
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        toggleUploadFields();
-
-        // ตั้งค่าให้วันที่ที่เลือกย้อนหลังไม่ได้
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('delivery_date').setAttribute('min', today);
-    });
-</script>
 </body>
 </html>

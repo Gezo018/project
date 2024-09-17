@@ -8,8 +8,7 @@ include('navbar.php');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>เกี่ยวกับเรา - baanfrankbaker</title>
     <style>
         body {
             font-family: 'Itim', sans-serif;
@@ -17,17 +16,17 @@ include('navbar.php');
             margin: 0;
             padding: 0;
             color: #4a4a4a;
-            background-color: #fff8f0;
+            background-color: #F9DBBA;
         }
         
         header {
-            padding: 20px;
-            background-color: #f4e1d2;
-            color: #4a4a4a;
-            text-align: center;
-            font-size: 24px;
-            font-weight: 300;
-        }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #FFD4DB;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
         .container {
             max-width: 800px;
@@ -95,7 +94,8 @@ include('navbar.php');
                 <h3>📍พิกัด หมู่บ้านกรีนวิว 3 ถนน 9 กิโลศรีราชา</h3>
                 <p>🧁ติดต่อ ☎️0806137730 ไม่มีหน้าร้าน รบกวนสั่งล่วงหน้า 1 - 2 วัน 
                 <br>✅ขนมทำสด - ใหม่ตามออเดอร์
-                <br>✅ไม่มีสารกันบูด - กันรา ไม่มีไขมันทรานส์</p>
+                <br>✅ไม่มีสารกันบูด - กันรา ไม่มีไขมันทรานส์
+                <br>📢 สั่งครบ 100 บาทส่งฟรี ไม่ถึง 100 มีค่าส่ง 50฿ 🛻</p>
             </div>
         </section>
 

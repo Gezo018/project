@@ -27,13 +27,28 @@ if (!$result) {
 
 // Fetch cart items
 $stmt = $pdo->prepare("
-    SELECT ci.*, p.name, p.image 
+    SELECT ci.*, p.name, p.price, p.image, p.type
     FROM cart_items ci
     JOIN products p ON ci.product_id = p.id
     WHERE ci.cart_id = ?
 ");
 $stmt->execute([$cart_id]);
 $cart_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Function to get price based on size for Pound cakes
+function getPoundCakePrice($size) {
+    switch ($size) {
+        case '1':
+            return 250;
+        case '1.5':
+            return 350;
+        case '2':
+            return 500;
+        default:
+            return 250; // Default to 1 pound price
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -41,16 +56,32 @@ $cart_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ตะกร้าสินค้า - บ้านแฟรงค์เบเกอร์</title>
+    <title>ตะกร้าสินค้า - baanfrankbaker</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Itim&display=swap">
     <style>
+        :root {
+            --primary-color: #FF9A8B;
+            --secondary-color: #FF6A88;
+            --accent-color: #FF99AC;
+            --background-color:  #F9DBBA;
+            --text-color: #4A4A4A;
+            --card-bg-color: #FFFFFF;
+        }
         body {
             font-family: 'Itim', sans-serif;
             color: #333;
-            background-color: #fff8f0;
+            background-color: #F9DBBA;
             margin: 0;
             padding: 0;
         }
+        header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #FFD4DB;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
         .container {
             max-width: 800px;
             margin: 20px auto;
@@ -111,12 +142,22 @@ $cart_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
             background-color: #e31b0c;
         }
         .checkout-button {
-            margin-top: 20px;
-            width: 100%;
-            background-color: #ff6f61;
+            display: inline-block;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 154, 139, 0.4);
+            width:100%;
         }
         .checkout-button:hover {
-            background-color: #ff564f;
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 154, 139, 0.6);
         }
         .empty-cart {
             text-align: center;
@@ -138,16 +179,20 @@ $cart_items = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="empty-cart">ตะกร้าสินค้าของคุณว่างเปล่า</div>
         <?php else: 
             foreach ($cart_items as $item): 
-                $item_total = $item['price'] * $item['quantity'];
+                if ($item['type'] == 'Pound') {
+                    $item_price = getPoundCakePrice($item['size']);
+                } else {
+                    $item_price = $item['price'];
+                }
+                $item_total = $item_price * $item['quantity'];
                 $total_price += $item_total;
         ?>
             <div class="cart-item">
                 <img src="<?php echo htmlspecialchars($item['image']); ?>" alt="<?php echo htmlspecialchars($item['name']); ?>">
                 <div class="cart-item-info">
                     <h3><?php echo htmlspecialchars($item['name']); ?></h3>
-                    <p><strong>ขนาด:</strong> <?php echo htmlspecialchars($item['size']); ?></p>
+                    <p><strong>ขนาด:</strong> <?php echo htmlspecialchars($item['size']); ?> <?php echo ($item['type'] == 'Pound') ? 'ปอนด์' : ''; ?></p>
                     <p><strong>รสชาติ:</strong> <?php echo htmlspecialchars($item['flavor']); ?></p>
-                    <p><strong>ข้อความ:</strong> <?php echo htmlspecialchars($item['custom_message']); ?></p>
                     <p><strong>จำนวน:</strong> <?php echo htmlspecialchars($item['quantity']); ?></p>
                     <p class="item-price"><strong>ราคา:</strong> ฿<?php echo number_format($item_total, 2); ?></p>
                 </div>
